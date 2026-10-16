@@ -33,6 +33,16 @@ describe("createProductSchema", () => {
 		);
 	});
 
+	it("treats null and blank optional fields as absent", () => {
+		const result = createProductSchema.parse({
+			...valid,
+			description: null,
+			brand: "  ",
+		});
+		expect(result.description ?? undefined).toBeUndefined();
+		expect(result.brand ?? undefined).toBeUndefined();
+	});
+
 	it("strips unknown keys", () => {
 		const result = createProductSchema.parse({
 			...valid,

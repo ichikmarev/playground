@@ -56,6 +56,16 @@ describe("POST endpoints (HTTP)", () => {
 			);
 		});
 
+		it("accepts a record round-tripped from GET (null optional fields)", async () => {
+			const res = await post("/users", {
+				name: "Dave",
+				email: "dave@example.com",
+				phone: null,
+			});
+			expect(res.status).toBe(201);
+			expect((await res.json()).phone).toBeNull();
+		});
+
 		it("returns 400 for a wrongly typed field instead of a 500", async () => {
 			const res = await post("/users", {
 				name: "Bob",
@@ -120,7 +130,9 @@ describe("POST endpoints (HTTP)", () => {
 		});
 
 		it("returns 409 for a duplicate SKU", async () => {
-			const res = await post("/products", { ...product, name: "Other" });
+			const payload = { ...product, sku: "DUP-001" };
+			expect((await post("/products", payload)).status).toBe(201);
+			const res = await post("/products", { ...payload, name: "Other" });
 			expect(res.status).toBe(409);
 		});
 	});
