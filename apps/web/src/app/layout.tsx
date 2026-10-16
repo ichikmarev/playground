@@ -19,7 +19,10 @@ export default function RootLayout({
 						<a href="/" className="text-lg font-bold">
 							Zapp
 						</a>
-						<a href="/users" className="text-muted-foreground hover:text-foreground">
+						<a
+							href="/users"
+							className="text-muted-foreground hover:text-foreground"
+						>
 							Users
 						</a>
 						<a

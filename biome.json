@@ -1,7 +1,11 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
-	"organizeImports": {
-		"enabled": true
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
 	},
 	"linter": {
 		"enabled": true
@@ -9,5 +13,33 @@
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab"
-	}
+	},
+	"javascript": {
+		"parser": {
+			"unsafeParameterDecoratorsEnabled": true
+		}
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["apps/api/**"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useImportType": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["apps/api/src/database/seed.ts"],
+			"formatter": {
+				"enabled": false
+			}
+		}
+	]
 }
