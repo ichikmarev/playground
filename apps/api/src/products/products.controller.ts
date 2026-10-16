@@ -1,4 +1,6 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { ZodValidationPipe } from "../common/zod-validation.pipe";
+import { type CreateProductDto, createProductSchema } from "./products.schema";
 import { ProductsService } from "./products.service";
 
 @Controller("products")
@@ -17,15 +19,7 @@ export class ProductsController {
 
 	@Post()
 	create(
-		@Body()
-		body: {
-			name: string;
-			description?: string;
-			price: number;
-			sku: string;
-			category: string;
-			brand?: string;
-		},
+		@Body(new ZodValidationPipe(createProductSchema)) body: CreateProductDto,
 	) {
 		return this.productsService.create(body);
 	}

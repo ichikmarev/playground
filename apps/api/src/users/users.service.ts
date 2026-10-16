@@ -1,5 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, Injectable } from "@nestjs/common";
+import { isUniqueConstraintError } from "../common/sqlite-errors";
 import { DatabaseService } from "../database/database.service";
+import type { CreateUserDto } from "./users.schema";
 
 @Injectable()
 export class UsersService {
@@ -13,13 +15,20 @@ export class UsersService {
 		return this.db.get("SELECT * FROM users WHERE id = ?", [id]);
 	}
 
-	create(data: { name: string; email: string; phone?: string }) {
-		const result = this.db.run(
-			"INSERT INTO users (name, email, phone) VALUES (?, ?, ?)",
-			[data.name, data.email, data.phone || null],
-		);
-		return this.db.get("SELECT * FROM users WHERE id = ?", [
-			result.lastInsertRowid,
-		]);
+	create(data: CreateUserDto) {
+		try {
+			const result = this.db.run(
+				"INSERT INTO users (name, email, phone) VALUES (?, ?, ?)",
+				[data.name, data.email, data.phone || null],
+			);
+			return this.db.get("SELECT * FROM users WHERE id = ?", [
+				result.lastInsertRowid,
+			]);
+		} catch (error) {
+			if (isUniqueConstraintError(error)) {
+				throw new ConflictException("User with this email already exists");
+			}
+			throw error;
+		}
 	}
 }
