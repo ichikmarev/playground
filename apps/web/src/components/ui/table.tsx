@@ -47,9 +47,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
 }
 
 function TableCell({ className, ...props }: React.ComponentProps<"td">) {
-	return (
-		<td className={cn("p-2 align-middle", className)} {...props} />
-	);
+	return <td className={cn("p-2 align-middle", className)} {...props} />;
 }
 
-export { Table, TableHeader, TableBody, TableHead, TableRow, TableCell };
+export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow };
