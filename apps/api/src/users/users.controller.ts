@@ -1,4 +1,6 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { ZodValidationPipe } from "../common/zod-validation.pipe";
+import { type CreateUserDto, createUserSchema } from "./users.schema";
 import { UsersService } from "./users.service";
 
 @Controller("users")
@@ -16,7 +18,7 @@ export class UsersController {
 	}
 
 	@Post()
-	create(@Body() body: { name: string; email: string; phone?: string }) {
+	create(@Body(new ZodValidationPipe(createUserSchema)) body: CreateUserDto) {
 		return this.usersService.create(body);
 	}
 }
